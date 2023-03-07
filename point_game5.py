@@ -85,7 +85,7 @@ class point_game():
                                 elif way == '2': 
                                     self.player[f'{i} player'][1].append([x+1,y])
                                     break
-                            elif way == 'x': break
+                            if way == 'x': break
                             print('방향을 다시 입력해주세요')
                         if way == 'x': break
                         x,y = self.player[f'{i} player'][1][-1]
@@ -107,11 +107,14 @@ class point_game():
                     if way == 'x': break
             if way_p == True: break
             if way == 'x': break
-        self.exit(turn)
+        self.exit(turn,way,i)
 
-    def exit(self,turn):
+    def exit(self,turn,way,i):
         self.display()
         print(f'{turn} round로 게임이 끝났습니다.')
+        if way == 'x' :
+            self.player[f'{i} player'][0] = 0 
+            print(f'{i}player 의 기권입니다.')
         if len(self.player[f'1 player'])!=0 :
             win_p = 0
             for i in range(1,self.player_n+1):
@@ -133,7 +136,7 @@ class point_game():
         if len(self.player[f'1 player'])!=0 :
             for i in range(1,self.player_n+1):
                 p = self.player[f'{i} player']
-                print(f'{i}P :',p[0],'점 ,',f'[{p[1][-1][0]+1,p[1][-1][1]+1}]',end='\t')
+                print(f'{i}P :',p[0],'점 ,',f'[{p[1][-1][0],p[1][-1][1]}]',end='\t')
                 print()
 
     def condition(self,way,way_list,x,y):
