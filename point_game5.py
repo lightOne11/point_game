@@ -10,6 +10,7 @@
 # 9. 다른 사람이 선택한 곳은 지나갈 수 없음
 import numpy as np
 import random as rm
+import pandas as pd
 import torch
 import torch.nn as nn
 
@@ -34,6 +35,7 @@ class point_game():
         pla = np.array(range(1, place_n*place_n+1))
         rm.shuffle(pla)
         self.place = pla.reshape(place_n,place_n).tolist()
+        self.place_o = self.place
         way_list = self.matinit(place_n)
         self.main(way_list)
 
@@ -108,6 +110,12 @@ class point_game():
             if way_p == True: break
             if way == 'x': break
         self.exit(turn,way,i)
+        self.gamesave()
+
+    def gamesave(self):
+        print(self.place_o)
+        print(self.player)
+        #pd.DataFrame(self.place_o+list(self.player)).to_csv('https://drive.google.com/drive/folders/17OdUEiltOKPB4v65Fk5euoJSNOJRmEyr?usp=share_link')
 
     def exit(self,turn,way,i):
         self.display()
