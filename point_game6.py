@@ -10,15 +10,6 @@
 # 9. 다른 사람이 선택한 곳은 지나갈 수 없음
 import numpy as np
 import random as rm
-import pandas as pd
-
-class com:
-    def __init__(self,input_X,result_Y,outcome_Y):
-        pass
-    
-
-
-
 
 
 class point_game():
@@ -50,10 +41,15 @@ class point_game():
                     self.display()
                     while True:
                         try:
-                            x,y=map(int,input(f'[{i}player] 좌표를 입력하세요').split())
+                            way = input(f'[{i}player] 좌표를 입력하세요(종료x)')
+                            if way == 'x': break
+                            x,y=map(int,way).split()
                             if self.condition(way,way_list,x,y)== True:                                
-                                break
-                        except: pass               
+                                break                        
+                        except: pass
+                    if way == 'x': 
+                        self.way = way
+                        return               
                     self.player[f'{i} player'].append(int(self.place[x-1][y-1]))
                     self.player[f'{i} player'].append([[x,y]])
                     way_list[x,y] = str(i)+'P'
@@ -110,24 +106,25 @@ class point_game():
             if way == 'x': break
             if way_p == True: break              
         self.i = i
+        self.way = way
 
     def main(self,way_list):
-        way = ''
+        self.way = ''
         way_p = []
         self.i = 1
+        self.turn = 0
         while True: 
             if len(self.player[f'1 player'])==0:
-                self.start(way,way_list)
-            else :
-                self.turn = 0
+                self.start(self.way,way_list)
+            else :                
                 while True:
-                    self.move(way,way_list,self.i)
+                    self.move(self.way,way_list,self.i)
                     if way_p == True: break
-                    if way == 'x': break
+                    if self.way == 'x': break
             if way_p == True: break
-            if way == 'x': break
-        if self.siege == True : self.move(way,way_list,self.i)
-        self.exit(self.turn,way,self.i)
+            if self.way == 'x': break
+        if self.siege == True and not self.way == 'x' : self.move(self.way,way_list,self.i)
+        self.exit(self.turn,self.way,self.i)
         self.gamesave()
 
     def gamesave(self):
@@ -138,7 +135,7 @@ class point_game():
     def exit(self,turn,way,i):
         self.display()
         print(f'{turn} round로 게임이 끝났습니다.')
-        if way == 'x' :
+        if way == 'x' and not turn == 0 :
             self.player[f'{i} player'][0] = 0 
             print(f'{i}player 의 기권입니다.')
         if len(self.player[f'1 player'])!=0 :
@@ -150,7 +147,7 @@ class point_game():
                     win_p = p[0]
                     win_n = i
 
-        print(f'\n승자는 {win_n} player 입니다.')
+        if not turn == 0 : print(f'\n승자는 {win_n} player 입니다.')
 
 
     def display(self):
